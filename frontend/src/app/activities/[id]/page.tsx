@@ -10,8 +10,12 @@ import { ArrowLeft } from 'lucide-react';
 import ImageLightbox from '@/components/ImageLightbox';
 
 export default function DetailPage({ params }: { params: { id: string } }) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>(
+    () => initialActivities.find((a) => a.id === params.id) || null
+  );
+  const [loading, setLoading] = useState(
+    () => !initialActivities.some((a) => a.id === params.id)
+  );
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 

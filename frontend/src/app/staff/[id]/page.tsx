@@ -39,8 +39,12 @@ const getShortRole = (role: string) => {
 };
 
 export default function StaffProfile({ params }: { params: { id: string } }) {
-  const [member, setMember] = useState<Staff | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [member, setMember] = useState<Staff | null>(
+    () => (initialStaff.find((s) => s.id === params.id) as unknown as Staff) || null
+  );
+  const [loading, setLoading] = useState(
+    () => !initialStaff.some((s) => s.id === params.id)
+  );
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 

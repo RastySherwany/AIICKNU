@@ -8,8 +8,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function Page() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any[]>(initialActivities);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch(`${getApiUrl('/activity')}`)

@@ -172,8 +172,8 @@ const StaffCard = ({ member, idx }: { member: Staff; idx: number }) => {
 };
 
 export default function StaffPage() {
-  const [staff, setStaff] = useState<Staff[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [staff, setStaff] = useState<Staff[]>(initialStaff as unknown as Staff[]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch(`${getApiUrl('/staff')}`)

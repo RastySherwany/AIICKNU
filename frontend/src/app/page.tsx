@@ -15,15 +15,27 @@ const fadeIn = {
 };
 
 export default function Home() {
-  const [slides, setSlides] = useState<any[]>([{
-    id: 'default-hero',
-    type: 'HERO',
-    title: 'Artificial Intelligence & \nInnovation Centre',
-    description: 'Advancing the frontier of Artificial Intelligence through cutting-edge research, intelligent robotics, and transformative technological solutions.',
-    image: '/hero-bg-light.jpg',
-    link: '/about',
-    linkText: 'Explore The Centre'
-  }]);
+  const [slides, setSlides] = useState<any[]>([
+    {
+      id: 'default-hero',
+      type: 'HERO',
+      title: 'Artificial Intelligence & \nInnovation Centre',
+      description: 'Advancing the frontier of Artificial Intelligence through cutting-edge research, intelligent robotics, and transformative technological solutions.',
+      image: '/hero-bg-light.jpg',
+      link: '/about',
+      linkText: 'Explore The Centre'
+    },
+    ...initialActivities.map(p => ({
+      id: p.id,
+      type: 'activities',
+      title: p.title,
+      description: p.description,
+      date: p.date,
+      image: p.image?.split(',')[0],
+      link: `/activities/${p.id}`,
+      linkText: 'Read Activity'
+    }))
+  ]);
   
   const [currentSlide, setCurrentSlide] = useState(0);
 

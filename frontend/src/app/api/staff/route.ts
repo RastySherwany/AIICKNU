@@ -4,3 +4,4 @@ import { initialStaff } from '@/lib/initialData';
 export async function GET() {
   return NextResponse.json(initialStaff);
 }
+
