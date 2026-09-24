@@ -1,6 +1,7 @@
 'use client';
 
 import { getApiUrl, getImageUrl } from '@/lib/api';
+import { initialStaff } from '@/lib/initialData';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -90,8 +91,7 @@ const SocialIcons = ({ member }: { member: Staff }) => (
 
 const getImgSrc = (member: Staff) => {
   if (!member.image) return null;
-  const first = member.image.split(',')[0];
-  return first?.startsWith('/') ? `${getApiUrl('${first}')}` : first;
+  return getImageUrl(member.image);
 };
 
 const getShortRole = (role: string) => {
@@ -177,13 +177,20 @@ export default function StaffPage() {
 
   useEffect(() => {
     fetch(`${getApiUrl('/staff')}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch staff');
+        return res.json();
+      })
       .then(data => {
-        setStaff(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setStaff(data);
+        } else {
+          setStaff(initialStaff as unknown as Staff[]);
+        }
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        setStaff(initialStaff as unknown as Staff[]);
         setLoading(false);
       });
   }, []);

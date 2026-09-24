@@ -1,6 +1,7 @@
 'use client';
 
 import { getApiUrl, getImageUrl } from '@/lib/api';
+import { initialActivities } from '@/lib/initialData';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,7 +32,10 @@ export default function Home() {
       fetch(`${getApiUrl('/news')}`).then(r => r.json()).catch(() => []),
       fetch(`${getApiUrl('/activity')}`).then(r => r.json()).catch(() => [])
     ]).then(([news, activities]) => {
-      const posts = [...news.map((n:any) => ({...n, type: 'news'})), ...activities.map((a:any) => ({...a, type: 'activities'}))]
+      const allNews = Array.isArray(news) && news.length > 0 ? news : [];
+      const allActivities = Array.isArray(activities) && activities.length > 0 ? activities : initialActivities;
+      
+      const posts = [...allNews.map((n:any) => ({...n, type: 'news'})), ...allActivities.map((a:any) => ({...a, type: 'activities'}))]
         .filter(p => p.image)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 4) 
@@ -47,8 +51,21 @@ export default function Home() {
         }));
         
       if (posts.length > 0) {
-        setSlides(prev => [...prev, ...posts]);
+        setSlides(prev => [prev[0], ...posts]);
       }
+    }).catch(() => {
+      // Direct fallback
+      const posts = initialActivities.map(p => ({
+        id: p.id,
+        type: 'activities',
+        title: p.title,
+        description: p.description,
+        date: p.date,
+        image: p.image?.split(',')[0],
+        link: `/activities/${p.id}`,
+        linkText: 'Read Activity'
+      }));
+      setSlides(prev => [prev[0], ...posts]);
     });
   }, []);
 
@@ -77,7 +94,7 @@ export default function Home() {
             className="absolute inset-0 z-0"
           >
             <img 
-              src={slide.image?.startsWith('/uploads') ? `${getApiUrl('${slide.image}')}` : slide.image} 
+              src={getImageUrl(slide.image)} 
               alt={slide.title} 
               className="w-full h-full object-cover object-center"
             />

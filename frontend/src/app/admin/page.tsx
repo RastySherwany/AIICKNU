@@ -20,7 +20,7 @@ export default function AdminPage() {
 
   const fetchData = (endpoint: string) => {
     setLoading(true);
-    fetch(`${getApiUrl('/${endpoint}')}`)
+    fetch(getApiUrl(`/${endpoint}`))
       .then(res => res.json())
       .then(resData => {
         setData(resData);
@@ -45,7 +45,7 @@ export default function AdminPage() {
 
   const handleDelete = (id: string) => {
     if (confirm('Are you sure you want to delete this record?')) {
-      fetch(`${getApiUrl('/${activeTab}/${id}')}`, { method: 'DELETE' })
+      fetch(getApiUrl(`/${activeTab}/${id}`), { method: 'DELETE' })
         .then(() => fetchData(activeTab));
     }
   };
@@ -103,8 +103,8 @@ export default function AdminPage() {
     
     const method = editingId ? 'PATCH' : 'POST';
     const url = editingId 
-      ? `${getApiUrl('/${activeTab}/${editingId}')}`
-      : `${getApiUrl('/${activeTab}')}`;
+      ? getApiUrl(`/${activeTab}/${editingId}`)
+      : getApiUrl(`/${activeTab}`);
       
     fetch(url, {
       method,

@@ -15,14 +15,17 @@ export default function DetailPage({ params }: { params: { id: string } }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`${getApiUrl('/news/')}` + params.id)
-      .then(res => res.json())
+    fetch(getApiUrl(`/news/${params.id}`))
+      .then(res => {
+        if (!res.ok) throw new Error('Not found');
+        return res.json();
+      })
       .then(resData => {
         setData(resData);
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        setData(null);
         setLoading(false);
       });
   }, [params.id]);

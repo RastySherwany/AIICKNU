@@ -1,6 +1,7 @@
 'use client';
 
 import { getApiUrl, getImageUrl } from '@/lib/api';
+import { initialActivities } from '@/lib/initialData';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -12,9 +13,20 @@ export default function Page() {
 
   useEffect(() => {
     fetch(`${getApiUrl('/activity')}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load activities');
+        return res.json();
+      })
       .then(resData => {
-        setData(resData);
+        if (Array.isArray(resData) && resData.length > 0) {
+          setData(resData);
+        } else {
+          setData(initialActivities);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setData(initialActivities);
         setLoading(false);
       });
   }, []);

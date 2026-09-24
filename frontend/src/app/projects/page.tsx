@@ -14,7 +14,11 @@ export default function Page() {
     fetch(`${getApiUrl('/project')}`)
       .then(res => res.json())
       .then(resData => {
-        setData(resData);
+        setData(Array.isArray(resData) ? resData : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setData([]);
         setLoading(false);
       });
   }, []);

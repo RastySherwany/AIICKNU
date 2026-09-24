@@ -1,6 +1,7 @@
 'use client';
 
 import { getApiUrl, getImageUrl } from '@/lib/api';
+import { initialActivities } from '@/lib/initialData';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -15,14 +16,23 @@ export default function DetailPage({ params }: { params: { id: string } }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`${getApiUrl('/activity/')}` + params.id)
-      .then(res => res.json())
+    fetch(getApiUrl(`/activity/${params.id}`))
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch activity');
+        return res.json();
+      })
       .then(resData => {
-        setData(resData);
+        if (resData && resData.id) {
+          setData(resData);
+        } else {
+          const fallback = initialActivities.find(a => a.id === params.id);
+          setData(fallback || null);
+        }
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        const fallback = initialActivities.find(a => a.id === params.id);
+        setData(fallback || null);
         setLoading(false);
       });
   }, [params.id]);

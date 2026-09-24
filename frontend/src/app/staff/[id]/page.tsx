@@ -1,6 +1,7 @@
 'use client';
 
 import { getApiUrl, getImageUrl } from '@/lib/api';
+import { initialStaff } from '@/lib/initialData';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -44,14 +45,23 @@ export default function StaffProfile({ params }: { params: { id: string } }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`${getApiUrl('/staff/${params.id}')}`)
-      .then(res => res.json())
+    fetch(getApiUrl(`/staff/${params.id}`))
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
       .then(data => {
-        setMember(data);
+        if (data && data.id) {
+          setMember(data);
+        } else {
+          const fallback = initialStaff.find(s => s.id === params.id);
+          setMember((fallback as unknown as Staff) || null);
+        }
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
+      .catch(() => {
+        const fallback = initialStaff.find(s => s.id === params.id);
+        setMember((fallback as unknown as Staff) || null);
         setLoading(false);
       });
   }, [params.id]);
@@ -77,7 +87,7 @@ export default function StaffProfile({ params }: { params: { id: string } }) {
     ? member.image
         .split(',')
         .filter(Boolean)
-        .map((url: string) => (url?.startsWith('/') ? `${getApiUrl('${url}')}` : url))
+        .map((url: string) => getImageUrl(url))
     : [];
 
   return (
