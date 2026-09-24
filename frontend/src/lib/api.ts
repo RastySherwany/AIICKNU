@@ -19,3 +19,4 @@ export const getImageUrl = (url?: string | null) => {
   }
   return first;
 };
+

@@ -45,7 +45,7 @@ export default function Page() {
             >
               <Link href={`/projects/${item.id}`} className="block h-full group">
                 <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 group-hover:shadow-xl group-hover:border-[#002147]/20 transition-all flex flex-col h-full group-hover:-translate-y-1 overflow-hidden">
-                  {item.image && <div className="-mx-8 -mt-8 mb-6 h-48 bg-gray-100"><img src={item.image.split(',')[0]?.startsWith('/') ? `${getApiUrl('${item.image.split(',')[0]}')}` : item.image.split(',')[0]} alt={item.title} className="w-full h-full object-cover" /></div>}
+                  {item.image && <div className="-mx-8 -mt-8 mb-6 h-48 bg-gray-100"><img src={getImageUrl(item.image)} alt={item.title} className="w-full h-full object-cover" /></div>}
                   <h3 className="text-2xl font-bold mb-4 text-[#002147] line-clamp-2">{item.title}</h3>
                   
                   <div className="text-gray-600 mb-6 flex-grow text-justify line-clamp-4 leading-relaxed">

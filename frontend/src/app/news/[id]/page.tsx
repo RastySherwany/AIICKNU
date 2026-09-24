@@ -43,7 +43,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
     ? data.image
         .split(',')
         .filter(Boolean)
-        .map((url: string) => (url?.startsWith('/') ? `${getApiUrl('${url}')}` : url))
+        .map((url: string) => getImageUrl(url))
     : [];
 
   const openLightbox = (index: number) => {

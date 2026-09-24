@@ -279,7 +279,7 @@ export default function AdminPage() {
                           {formData[field].split(',').filter(Boolean).map((url: string, i: number) => (
                             <div key={i} className={`relative group border-2 rounded-lg overflow-hidden ${i === 0 ? 'border-[#002147]' : 'border-transparent'}`}>
                               {i === 0 && <div className="absolute top-0 left-0 bg-[#002147] text-white text-[10px] font-bold px-2 py-1 z-10">COVER</div>}
-                              <img src={url?.startsWith('/') ? `${getApiUrl('${url}')}` : url} alt="Preview" className="h-32 w-full object-cover" />
+                              <img src={getImageUrl(url)} alt="Preview" className="h-32 w-full object-cover" />
                               
                               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center flex-col gap-2 transition-opacity">
                                 {i !== 0 && (
