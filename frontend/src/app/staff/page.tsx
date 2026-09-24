@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -89,7 +91,7 @@ const SocialIcons = ({ member }: { member: Staff }) => (
 const getImgSrc = (member: Staff) => {
   if (!member.image) return null;
   const first = member.image.split(',')[0];
-  return first?.startsWith('/') ? `http://${window.location.hostname}:3001${first}` : first;
+  return first?.startsWith('/') ? `${getApiUrl('${first}')}` : first;
 };
 
 const getShortRole = (role: string) => {
@@ -174,7 +176,7 @@ export default function StaffPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}:3001/staff`)
+    fetch(`${getApiUrl('/staff')}`)
       .then(res => res.json())
       .then(data => {
         setStaff(data);

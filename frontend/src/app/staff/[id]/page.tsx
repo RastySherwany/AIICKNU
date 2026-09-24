@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -42,7 +44,7 @@ export default function StaffProfile({ params }: { params: { id: string } }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}:3001/staff/${params.id}`)
+    fetch(`${getApiUrl('/staff/${params.id}')}`)
       .then(res => res.json())
       .then(data => {
         setMember(data);
@@ -75,7 +77,7 @@ export default function StaffProfile({ params }: { params: { id: string } }) {
     ? member.image
         .split(',')
         .filter(Boolean)
-        .map((url: string) => (url?.startsWith('/') ? `http://${window.location.hostname}:3001${url}` : url))
+        .map((url: string) => (url?.startsWith('/') ? `${getApiUrl('${url}')}` : url))
     : [];
 
   return (

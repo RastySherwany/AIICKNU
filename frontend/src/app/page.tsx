@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -26,8 +28,8 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`http://${window.location.hostname}:3001/news`).then(r => r.json()).catch(() => []),
-      fetch(`http://${window.location.hostname}:3001/activity`).then(r => r.json()).catch(() => [])
+      fetch(`${getApiUrl('/news')}`).then(r => r.json()).catch(() => []),
+      fetch(`${getApiUrl('/activity')}`).then(r => r.json()).catch(() => [])
     ]).then(([news, activities]) => {
       const posts = [...news.map((n:any) => ({...n, type: 'news'})), ...activities.map((a:any) => ({...a, type: 'activities'}))]
         .filter(p => p.image)
@@ -75,7 +77,7 @@ export default function Home() {
             className="absolute inset-0 z-0"
           >
             <img 
-              src={slide.image?.startsWith('/uploads') ? `http://${window.location.hostname}:3001${slide.image}` : slide.image} 
+              src={slide.image?.startsWith('/uploads') ? `${getApiUrl('${slide.image}')}` : slide.image} 
               alt={slide.title} 
               className="w-full h-full object-cover object-center"
             />

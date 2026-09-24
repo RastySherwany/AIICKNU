@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -13,7 +15,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}:3001/publication/` + params.id)
+    fetch(`${getApiUrl('/publication/')}` + params.id)
       .then(res => res.json())
       .then(resData => {
         setData(resData);
@@ -41,7 +43,7 @@ export default function DetailPage({ params }: { params: { id: string } }) {
     ? data.image
         .split(',')
         .filter(Boolean)
-        .map((url: string) => (url?.startsWith('/') ? `http://${window.location.hostname}:3001${url}` : url))
+        .map((url: string) => (url?.startsWith('/') ? `${getApiUrl('${url}')}` : url))
     : [];
 
   const openLightbox = (index: number) => {

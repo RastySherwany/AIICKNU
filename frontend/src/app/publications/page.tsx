@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -9,7 +11,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}:3001/publication`)
+    fetch(`${getApiUrl('/publication')}`)
       .then(res => res.json())
       .then(resData => {
         setData(resData);
@@ -43,7 +45,7 @@ export default function Page() {
             >
               <Link href={`/publications/${item.id}`} className="block h-full group">
                 <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 group-hover:shadow-xl group-hover:border-[#002147]/20 transition-all flex flex-col h-full group-hover:-translate-y-1 overflow-hidden">
-                  {item.image && <div className="-mx-8 -mt-8 mb-6 h-48 bg-gray-100"><img src={item.image.split(',')[0]?.startsWith('/') ? `http://${window.location.hostname}:3001${item.image.split(',')[0]}` : item.image.split(',')[0]} alt={item.title} className="w-full h-full object-cover" /></div>}
+                  {item.image && <div className="-mx-8 -mt-8 mb-6 h-48 bg-gray-100"><img src={item.image.split(',')[0]?.startsWith('/') ? `${getApiUrl('${item.image.split(',')[0]}')}` : item.image.split(',')[0]} alt={item.title} className="w-full h-full object-cover" /></div>}
                   <h3 className="text-2xl font-bold mb-4 text-[#002147] line-clamp-2">{item.title}</h3>
                   
                   <div className="text-gray-600 mb-6 flex-grow text-justify line-clamp-4 leading-relaxed">

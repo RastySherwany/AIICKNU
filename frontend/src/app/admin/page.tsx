@@ -1,5 +1,7 @@
 'use client';
 
+import { getApiUrl, getImageUrl } from '@/lib/api';
+
 import { useState, useEffect } from 'react';
 
 const ENDPOINTS = ['staff', 'news', 'project', 'publication', 'activity', 'dataset'];
@@ -18,7 +20,7 @@ export default function AdminPage() {
 
   const fetchData = (endpoint: string) => {
     setLoading(true);
-    fetch(`http://${window.location.hostname}:3001/${endpoint}`)
+    fetch(`${getApiUrl('/${endpoint}')}`)
       .then(res => res.json())
       .then(resData => {
         setData(resData);
@@ -43,7 +45,7 @@ export default function AdminPage() {
 
   const handleDelete = (id: string) => {
     if (confirm('Are you sure you want to delete this record?')) {
-      fetch(`http://${window.location.hostname}:3001/${activeTab}/${id}`, { method: 'DELETE' })
+      fetch(`${getApiUrl('/${activeTab}/${id}')}`, { method: 'DELETE' })
         .then(() => fetchData(activeTab));
     }
   };
@@ -76,7 +78,7 @@ export default function AdminPage() {
       formDataObj.append('file', file);
       
       try {
-        const res = await fetch(`http://${window.location.hostname}:3001/upload`, {
+        const res = await fetch(`${getApiUrl('/upload')}`, {
           method: 'POST',
           body: formDataObj
         });
@@ -101,8 +103,8 @@ export default function AdminPage() {
     
     const method = editingId ? 'PATCH' : 'POST';
     const url = editingId 
-      ? `http://${window.location.hostname}:3001/${activeTab}/${editingId}`
-      : `http://${window.location.hostname}:3001/${activeTab}`;
+      ? `${getApiUrl('/${activeTab}/${editingId}')}`
+      : `${getApiUrl('/${activeTab}')}`;
       
     fetch(url, {
       method,
@@ -277,7 +279,7 @@ export default function AdminPage() {
                           {formData[field].split(',').filter(Boolean).map((url: string, i: number) => (
                             <div key={i} className={`relative group border-2 rounded-lg overflow-hidden ${i === 0 ? 'border-[#002147]' : 'border-transparent'}`}>
                               {i === 0 && <div className="absolute top-0 left-0 bg-[#002147] text-white text-[10px] font-bold px-2 py-1 z-10">COVER</div>}
-                              <img src={url?.startsWith('/') ? `http://${window.location.hostname}:3001${url}` : url} alt="Preview" className="h-32 w-full object-cover" />
+                              <img src={url?.startsWith('/') ? `${getApiUrl('${url}')}` : url} alt="Preview" className="h-32 w-full object-cover" />
                               
                               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center flex-col gap-2 transition-opacity">
                                 {i !== 0 && (
