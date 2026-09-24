@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Staff {
+  id             String  @id @default(uuid())
+  name           String
+  title          String?
+  degree         String?
+  role           String
+  type           String  // 'CO_FOUNDER', 'ENGINEERING', 'COMPUTER_SCIENCE'
+  bio            String?
+  image          String?
+  linkedin       String?
+  orcid          String?
+  googleScholar  String?
+  researchGate   String?
+  personalSite   String? // For Rasty
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model News {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  image     String?
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  image       String?
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Publication {
+  id        String   @id @default(uuid())
+  title     String
+  authors   String
+  date      DateTime
+  link      String?
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  image       String?
+  isUpcoming  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Dataset {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
